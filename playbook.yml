@@ -1,0 +1,58 @@
+---
+
+- name: install dns srv
+  hosts: dns
+  remote_user: user
+  become: true
+
+  roles:
+  - dns
+
+- name: install dhcp srv
+  hosts: dhcp
+  remote_user: user
+  become: true
+
+  roles:
+  - dhcp
+
+- name: install ldap srv
+  hosts: ldap
+  remote_user: user
+  become: true
+
+  roles:
+  - ldap
+
+- name: install mail srv
+  hosts: mail
+  remote_user: user
+  become: true
+
+  roles:
+  - mail
+
+- name: install web srv
+  hosts: web
+  remote_user: user
+  become: true
+
+  roles:
+  - web
+  - nextcloud
+
+- name: install bckp srv
+  hosts: bckp
+  remote_user: user
+  become: true
+
+  roles:
+  - bckp
+
+- name: install pfsense
+  hosts: pfsense
+  remote_user: user
+  become: true
+
+  roles:
+  - pfsense
