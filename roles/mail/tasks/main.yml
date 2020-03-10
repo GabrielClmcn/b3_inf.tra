@@ -1,1 +1,76 @@
 ---
+
+- name: install postfix
+  yum:
+    name: ['postfix']
+    state: present
+    update_cache: yes
+
+- name: conf postfix
+  template:
+    src: ../templates/main.cf.j2
+    dest: /etc/postfix/main.cf
+  notify:
+  - Restart postfix
+
+- name: allow smtp
+  firewalld:
+    service: smtp
+    state: enabled
+    permanent: yes
+
+- name: install dovecot
+  yum:
+    name: ['dovecot']
+    state: present
+    update_cache: yes
+
+- name: conf dovecot step1
+  template:
+    src: dovecot.conf.j2
+    dest: /etc/dovecot/dovecot.conf
+
+- name: conf dovecot step2
+  template:
+    src: 10-auth.conf.j2
+    dest: /etc/dovecot/conf.d/10-auth.conf
+
+- name: conf dovecot step3
+  template:
+    src: 10-mail.conf.j2
+    dest: /etc/dovecot/conf.d/10-mail.conf
+
+- name: conf dovecot step4
+  template:
+    src: 10-master.conf.j2
+    dest: /etc/dovecot/conf.d/10-master.conf
+
+- name: conf dovecot step5
+  template:
+    src: 10-ssl.conf.j2
+    dest: /etc/dovecot/conf.d/10-ssl.conf
+  notify:
+  - Restart dovecot
+
+- name: allow imap
+  firewalld:
+    service: imap
+    state: enabled
+    permanent: yes
+
+- name: allow pop3
+  firewalld:
+    service: pop3
+    state: enabled
+    permanent: yes
+
+- name: install mailx
+  yum:
+    name: ['mailx']
+    state: present
+    update_cache: yes
+
+- name: conf mailx
+  template:
+    src: profile.j2
+    dest: /etc/profile
