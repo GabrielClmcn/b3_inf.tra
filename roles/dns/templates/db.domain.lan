@@ -1,0 +1,12 @@
+$TTL            604800
+$ORIGIN         domain.lan.
+@               IN      SOA     srv-dns01.domain.lan.   root.domain.lan. (
+                1               ; Serial
+                604800          ; Refresh
+                86400           ; Retry
+                2419200         ; Expire
+                604800 )        ; Negative Cache TTL
+;
+@               IN      NS      srv-dns01.domain.lan.
+@               IN      A       10.0.0.2
+srv-dns01       IN      A       10.0.0.2

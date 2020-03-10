@@ -1,0 +1,11 @@
+---
+
+- name: Copy ddns.key File
+  template:
+    src:  ddns.key
+    dest: /etc/dhcp/ddns.key
+
+- name: Copy DHCP Conf File
+  template:
+    src:  dhcpd.conf
+    dest: /etc/dhcp/dhcpd.conf
