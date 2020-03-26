@@ -1,10 +1,9 @@
 ---
 
-- name: Open Port DNS
-  firewalld:
-    service: dns
-    permanent: true
-    state: enabled
+- name: Install Bind & Bind Utils
+  yum:
+    pkg: ['bind','bind-utils']
+    state: latest
 
 - name: Modification /etc/hosts
   lineinfile:
@@ -13,21 +12,10 @@
     line: "10.0.0.2  srv-dns01.domain.lan  srv-dns01"
     state: present
 
-- name: Ajout du Hostname
-  replace:
+- name: Copy hostname Conf File
+  template:
+    src:  hostname
     dest: /etc/hostname
-    regexp: 'localhost.localdomain'
-    replace: 'srv-dns01.domain.lan'
-
-- name: Restart Network
-  service: 
-    name: network 
-    state: restarted
-
-- name: Install Bind & Bind Utils
-  yum:
-    pkg: ['bind','bind-utils']
-    state: latest
 
 - name: Change DNS Address to 10.0.0.2
   replace:
@@ -45,11 +33,6 @@
     src:  named.conf
     dest: /etc/named.conf
 
-- name: Copy Zone File
-  template:
-    src:  named.rfc1912.zones
-    dest: /etc/named.rfc1912.zones
-
 - name: Copy Forward Zone File
   template:
     src:  db.domain.lan
@@ -64,6 +47,13 @@
   template:
     src:  ddns.key
     dest: /etc/named/ddns.key
+
+- name: Open firewall port
+  firewalld:
+    service: dns
+    permanent: true
+    state: enabled
+    immediate: yes
 
 - name: Restart DNS
   service: 
