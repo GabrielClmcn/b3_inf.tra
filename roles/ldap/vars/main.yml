@@ -1,0 +1,5 @@
+LDAP_DN: "dc=domain,dc=lan"
+ROOT_DN: "cn=ldapadm,dc=domain,dc=lan"
+ROOT_PW: "password"
+DC_ATTRIBUTE_O: "SIOS Technology,Inc."
+DC_ATTRIBUTE_DC: "domain"

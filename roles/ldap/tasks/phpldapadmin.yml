@@ -1,0 +1,28 @@
+---
+
+- name: Install epel-release
+  yum:
+    pkg: epel-release
+    state: latest
+
+- name: Install PHPLdapAdmin
+  yum:
+    pkg: phpldapadmin
+    state: latest
+
+- name: Copy phpldapadmin.conf File
+  template:
+    src:  phpldapadmin.conf
+    dest: /etc/httpd/conf.d/phpldapadmin.conf
+
+- name: Restart Network
+  service: 
+    name: httpd
+    state: restarted
+
+- name: Open firewall port
+  firewalld:
+    service: http
+    permanent: true
+    state: enabled
+    immediate: yes

@@ -1,0 +1,17 @@
+dn: {{ LDAP_DN }}
+dc: {{ DC_ATTRIBUTE_DC }}
+objectClass: top
+objectClass: domain
+
+dn: {{ ROOT_DN }}
+objectClass: organizationalRole
+cn: ldapadm
+description: LDAP Manager
+
+dn: ou=People,{{ LDAP_DN }}
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Group,{{ LDAP_DN }}
+objectClass: organizationalUnit
+ou: Group

@@ -1,0 +1,17 @@
+dn: uid=testuser,ou=People,dc=domain,dc=lan
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: testuser
+uid: testuser
+uidNumber: 9999
+gidNumber: 100
+homeDirectory: /home/testuser
+loginShell: /bin/bash
+gecos: testuser [Admin (at) domain]
+userPassword: password
+shadowLastChange: 17058
+shadowMin: 0
+shadowMax: 99999
+shadowWarning: 7

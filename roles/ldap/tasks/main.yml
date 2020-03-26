@@ -1,1 +1,4 @@
 ---
+
+- include: openldap.yml
+- include: phpldapadmin.yml
