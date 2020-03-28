@@ -1,5 +1,38 @@
 ---
 
+- name: Modification /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^'
+    line: "10.0.0.2  srv-dns01.domain.lan  srv-dns01"
+    state: present
+
+- name: Copy hostname Conf File
+  template:
+    src:  hostname
+    dest: /etc/hostname
+
+- name: Copy hostname Conf File
+  template:
+    src:  resolv.conf
+    dest: /etc/resolv.conf
+
+- name: Change DNS Address to 10.0.0.2
+  replace:
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp0s3
+    regexp: 'DNS1=8.8.8.8'
+    replace: 'DNS1=10.0.0.2'
+  notify:
+      - Restart Network
+
+- name: Change DNS Address to 10.0.0.2
+  replace:
+    dest: /etc/sysconfig/network-scripts/ifcfg-enp0s8
+    regexp: 'DNS1=8.8.8.8'
+    replace: 'DNS1=10.0.0.2'
+  notify:
+      - Restart Network
+
 - name: install postfix
   yum:
     name: ['postfix']

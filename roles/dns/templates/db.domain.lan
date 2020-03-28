@@ -10,3 +10,8 @@ $ORIGIN         domain.lan.
 @               IN      NS      srv-dns01.domain.lan.
 @               IN      A       10.0.0.2
 srv-dns01       IN      A       10.0.0.2
+srv-dhcp01      IN      A       10.0.0.3
+srv-ldap01      IN      A       10.0.0.4
+srv-mail01      IN      A       10.0.0.5
+srv-web01       IN      A       10.0.0.6
+srv-backup01    IN      A       10.0.0.7

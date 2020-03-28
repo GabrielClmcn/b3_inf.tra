@@ -22,11 +22,8 @@
     dest: /etc/sysconfig/network-scripts/ifcfg-enp0s3
     regexp: 'DNS1=8.8.8.8'
     replace: 'DNS1=10.0.0.2'
-
-- name: Restart Network
-  service: 
-    name: network 
-    state: restarted
+  notify:
+  - Restart network
 
 - name: Install DHCP
   yum:
@@ -42,8 +39,3 @@
   template:
     src:  ddns.key
     dest: /etc/dhcp/ddns.key
-
-- name: Restart DHCP
-  service: 
-    name: dhcpd
-    state: restarted

@@ -1,0 +1,7 @@
+---
+
+- name: Restart Network
+  service: name=network state=restarted
+
+- name: Start slapd
+  service: name=slapd enabled=yes state=started

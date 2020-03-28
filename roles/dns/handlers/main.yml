@@ -1,4 +1,8 @@
 ---
+
+- name: Restart Network
+  service: name=network state=restarted
+
 # handlers file for Bind setup
 - name: restart named
   service:

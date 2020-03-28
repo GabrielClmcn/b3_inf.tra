@@ -9,3 +9,8 @@ $ORIGIN 0.0.10.in-addr.arpa.
 ;
 @       IN      NS      srv-dns01.domain.lan.
 2       IN      PTR     srv-dns01.domain.lan.
+3       IN      PTR     srv-dhcp01.domain.lan.
+4       IN      WWW     srv-ldap01.domain.lan.
+5       IN      MX      10 srv-mail01.domain.lan.
+6       IN      WWW     srv-web01.domain.lan.
+7       IN      PTR     srv-backup01.domain.lan.
