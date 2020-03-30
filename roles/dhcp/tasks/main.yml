@@ -39,3 +39,8 @@
   template:
     src:  ddns.key
     dest: /etc/dhcp/ddns.key
+
+- name: Restart DHCP
+  service: 
+    name: dhcpd
+    state: restarted
