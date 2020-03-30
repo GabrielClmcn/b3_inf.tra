@@ -1,13 +1,6 @@
 ---
 
-- name: install apache
-  apt:
-    name: ['apache2']
-    state: present
-    update_cache: yes
-
-- name: allow port 80 and 443
-  ufw:
-    rule: allow
-    to_port: '80'
-    proto: tcp
+- include: apache.yml
+- include: mysql.yml
+- include: config_mysql.yml
+- include: nextcloud.yml

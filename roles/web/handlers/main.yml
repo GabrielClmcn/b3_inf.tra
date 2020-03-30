@@ -1,4 +1,26 @@
 ---
 
-- name: Restart apache2
-  service: name=apache2 state=restarted
+- name: enable httpd
+  become: yes
+  service: 
+    name: httpd
+    enabled: yes
+
+- name: start httpd
+  become: yes
+  service: 
+    name: httpd
+    state: started
+
+- name: restart httpd
+  become: yes
+  service: 
+    name: httpd
+    state: restarted
+
+- name: start mariadb
+  become: yes
+  service: 
+    name: mariadb
+    state: started
+    enabled: true

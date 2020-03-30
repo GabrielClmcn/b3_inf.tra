@@ -1,0 +1,128 @@
+---
+
+- name: Replace localhost entry
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: 127.0.0.1     localhost nextcloud.lab
+
+- name: Disable SELinux
+  selinux:
+    state: disabled
+
+- name: Check that the nextcloud.tar.gz exists
+  stat:
+    path: /tmp/nextcloud.tar.gz
+  register: stat_result_tar
+
+- name: Download Nextcloud
+  get_url:
+    url: https://download.nextcloud.com/server/releases/latest-18.zip
+    dest: /tmp/nextcloud.tar.gz
+  when: stat_result_tar.stat.exists == False 
+
+- name: Check that the nextcloud folder exists
+  stat:
+    path: /var/www/html/nextcloud
+  register: stat_result_folder
+
+- name: Install unzip
+  yum:
+    name: ['unzip']
+    state: present
+
+- name: Extract Nextcloud
+  become: yes
+  unarchive: 
+    src: /tmp/nextcloud.tar.gz
+    dest: /var/www/html
+    remote_src: yes
+  when: stat_result_folder.stat.exists == False 
+
+- name: Create nextcloud/data directory
+  file:
+    path: /var/www/html/nextcloud/data
+    state: directory
+
+- name: Change ownership of installation directory
+  file: 
+    path: '{{ nxt_path }}'
+    owner: apache
+    group: apache
+    state: directory 
+    recurse: yes 
+    setype: httpd_sys_content_t
+
+- name: Create sites-available
+  file:
+    path: /etc/httpd/sites-available
+    state: directory
+
+- name: Create sites-enabled
+  file:
+    path: /etc/httpd/sites-enabled
+    state: directory
+
+- name: add Virtualhost conf for nextcloud
+  template: 
+    src: nextcloud.conf
+    dest: /etc/httpd/sites-available/nextcloud.conf
+    force: yes
+
+- name: Check that the nextcloud.conf link exists
+  stat:
+    path: /etc/httpd/sites-enabled/nextcloud.conf
+  register: stat_result_link
+
+- name: link sites-available and sites-enabled
+  become: yes
+  shell: rm /etc/httpd/sites-enabled/nextcloud.conf
+  notify: 
+      - restart httpd
+  when: stat_result_link.stat.exists == True
+
+- name: Check that the nextcloud.conf link exists
+  stat:
+    path: /etc/httpd/sites-enabled/nextcloud.conf
+  register: stat_result_link
+
+- name: link sites-available and sites-enabled
+  become: yes
+  shell: ln -s /etc/httpd/sites-available/nextcloud.conf /etc/httpd/sites-enabled/nextcloud.conf
+  notify: 
+      - restart httpd
+  when: stat_result_link.stat.exists == False 
+
+# - name: Install Nextcloud's Command-line Interface
+#   command: sudo -u apache php occ maintenance:install --admin-pass {{ nxt_admin_passwd }}
+#           --database mysql --database-host {{ mysql_host }} --database-name {{ mysql_db }} \
+#           --database-table-prefix {{ mysql_table_prefix }} --database-user {{ mysql_user }} \
+#           --database-pass {{ mysql_password }}
+#   become: yes
+#   # become_user: apache
+#   args:
+#     chdir: /var/www/html/nextcloud
+
+# - name: Modify thrusted_domains
+#   command: php occ config:system:set trusted_domains 2 --value={{ mysql_host }}
+#   become: yes
+#   become_user: apache
+#   args:
+#     chdir: /var/www/html/nextcloud
+
+# - name: Install Nextcloud's app Calendar
+#   command: php occ app:install calendar
+#   become: yes
+#   become_user: apache
+#   args:
+#     chdir: /var/www/html/nextcloud
+
+# - name: Install and create empty config for Nextcloud ldap config
+#   command: '{{ item }}'
+#   with_items:
+#     - php occ app:install user_ldap
+#     - php occ ldap:create-empty-config
+#   become: yes
+#   become_user: apache
+#   args:
+#     chdir: /var/www/html/nextcloud
