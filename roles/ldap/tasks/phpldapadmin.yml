@@ -14,8 +14,11 @@
   template:
     src:  phpldapadmin.conf
     dest: /etc/httpd/conf.d/phpldapadmin.conf
-  notify:
-      - Restart Network
+
+- name: Restart Network
+  service: 
+    name: httpd
+    state: restarted
 
 - name: Open firewall port
   firewalld:

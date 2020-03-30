@@ -22,15 +22,19 @@
     dest: /etc/sysconfig/network-scripts/ifcfg-enp0s3
     regexp: 'DNS1=8.8.8.8'
     replace: 'DNS1=10.0.0.2'
-  notify:
-      - Restart Network
+
+- name: Restart Network
+  service: 
+    name: network 
+    state: restarted
 
 - name: Install OpenLDAP
   yum:
     pkg: ['openldap','compat-openldap','openldap-clients','openldap-servers','openldap-servers-sql', 'openldap-devel']
     state: latest
-  notify:
-      - Start slapd
+
+- name: Start slapd
+  service: name=slapd enabled=yes state=started
 
 - name: Copy db.ldif File
   template:
