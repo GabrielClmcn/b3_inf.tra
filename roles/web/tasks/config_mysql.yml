@@ -1,0 +1,51 @@
+---
+
+
+- name: Install Mariadb
+  become: yes
+  yum:
+    name: ['MySQL-python']
+    state: latest
+    update_cache: yes
+
+- name: start mariadb
+  become: yes
+  service: 
+    name: mariadb
+    state: started
+    enabled: true
+
+- name: add ~/.my.cnf
+  become: yes
+  template:
+    src: .my.cnf
+    dest: /root/.my.cnf
+    force: yes
+
+- name: add my.cnf
+  become: yes
+  template:
+    src: my.cnf
+    dest: /etc/my.cnf
+    force: yes
+
+- name: create user
+  become: yes
+  mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    priv: "*.*:ALL"
+    host: "{{ mysql_host }}"
+
+- name: create db
+  become: yes
+  mysql_db:
+    name: "{{ mysql_db }}"
+    state: present
+
+- name: Open port 3306/tcp
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 3306
+    jump: ACCEPT

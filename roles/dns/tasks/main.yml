@@ -22,8 +22,11 @@
     dest: /etc/sysconfig/network-scripts/ifcfg-enp0s3
     regexp: 'DNS1=8.8.8.8'
     replace: 'DNS1=10.0.0.2'
-  notify:
-      - Restart Network
+
+- name: Restart network
+  service:
+    name: network
+    state: restarted
 
 - name: Copy Named Conf File
   template:
@@ -51,5 +54,8 @@
     permanent: true
     state: enabled
     immediate: yes
-  notify:
-      - Restart named
+
+- name: Restart named
+  service:
+    name: named
+    state: restarted

@@ -1,0 +1,31 @@
+---
+
+- name: install epel-release & yum-utils
+  become: yes
+  yum:
+    name: ['epel-release', 'yum-utils', 'http://rpms.remirepo.net/enterprise/remi-release-7.rpm']
+    state: present
+    update_cache: yes
+
+- name: Remove repository remi-php54
+  shell: yum-config-manager --disable remi-php54
+
+- name: enable repository remi-php73
+  shell: yum-config-manager --enable remi-php73
+
+- name: Install Apache + PHP
+  yum:
+    pkg: ['httpd', 'php', 'php-mysql', 'php-xml', 'php-ldap', 'php-mysqlnd', 'php-zip', 'php-devel', 'php-gd', 'php-mbstring', 'php-curl', 'php-xml', 'php-pear', 'php-bcmath', 'php-json', 'php-pdo']
+    state: latest
+
+- name: Open firewall port
+  firewalld:
+    service: http
+    permanent: true
+    state: enabled
+    immediate: yes
+
+- name: Restart Apache
+  service: 
+    name: httpd
+    state: restarted

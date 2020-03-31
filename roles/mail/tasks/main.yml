@@ -25,14 +25,6 @@
   notify:
       - Restart Network
 
-- name: Change DNS Address to 10.0.0.2
-  replace:
-    dest: /etc/sysconfig/network-scripts/ifcfg-enp0s8
-    regexp: 'DNS1=8.8.8.8'
-    replace: 'DNS1=10.0.0.2'
-  notify:
-      - Restart Network
-
 - name: install postfix
   yum:
     name: ['postfix']

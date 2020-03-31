@@ -1,0 +1,14 @@
+---
+
+mysql_db: "nextcloud"
+mysql_user: "nextcloud"
+mysql_password: "pass"
+mysql_host: '10.0.0.6'
+
+nxt_path: '/var/www/html/nextcloud'
+mysql_db: "nextcloud"
+mysql_user: "nextcloud"
+mysql_password: "pass"
+mysql_host: '10.0.0.6'
+mysql_table_prefix: "nxt_"
+nxt_admin_passwd: "root"

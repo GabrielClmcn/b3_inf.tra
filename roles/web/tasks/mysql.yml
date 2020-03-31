@@ -1,0 +1,31 @@
+- name: add MariaDB.repo
+  template: 
+    src: MariaDB.repo
+    dest: /etc/yum.repos.d/MariaDB.repo
+    force: yes
+
+- name: Force handlers to run
+  meta: flush_handlers
+  notify: yum-clean-metadata
+
+- name: remove /tmp/mysql
+  become: yes
+  file:
+    path: /tmp/mysql
+    state: absent
+
+- name: Install Mariadb
+  become: yes
+  yum:
+    name: ['MariaDB-server', 'MariaDB-client', 'MySQL-python']
+    state: latest
+    update_cache: yes
+
+- name: Create /tmp/mysql
+  file:
+    path: /tmp/mysql
+    state: directory
+    owner: mysql
+    group: root
+    mode: '0700'
+  become: yes
